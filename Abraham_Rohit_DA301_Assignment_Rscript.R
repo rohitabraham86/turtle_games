@@ -35,23 +35,47 @@ colnames(sales)
 # Visualizing the dataset.
 
 # Histogram
-par(mfcol = c(1,1))
-ggplot(data = sales, aes(x = NA_Sales)) + geom_histogram(bins = 20)
-ggplot(data = sales, aes(x = EU_Sales)) + geom_histogram(bins = 20)
-ggplot(data = sales, aes(x = Global_Sales)) + geom_histogram(bins = 20)
+par(mfrow = c(3,1))
+ggplot(data = sales, aes(x = NA_Sales)) + geom_histogram(bins = 20) +
+  labs(title = "Histogram - North America Sales",
+       x = "North America Sales",
+       y = "Count")
+ggplot(data = sales, aes(x = EU_Sales)) + geom_histogram(bins = 20)+
+  labs(title = "Histogram - European Union Sales",
+       x = "European Union Sales",
+       y = "Count")
+ggplot(data = sales, aes(x = Global_Sales)) + geom_histogram(bins = 20)+
+  labs(title = "Histogram - Global Sales",
+       x = "Global Sales",
+       y = "Count")
 
 # Scatterplot
 ggplot(data = sales, aes(x = Platform, y = NA_Sales)) + 
-  geom_point() 
+  geom_point() +
+  labs(title = "Scatterplot - North America Sales",
+       x = "Platform",
+       y = "NA Sales")
 ggplot(data = sales, aes(x = Platform, y = EU_Sales)) + 
-  geom_point() 
+  geom_point() +
+  labs(title = "Scatterplot - European Union Sales",
+       x = "Platform",
+       y = "EU Sales")
 ggplot(data = sales, aes(x = Platform, y = Global_Sales)) + 
-  geom_point() 
+  geom_point() +
+  labs(title = "Scatterplot - Global Sales",
+       x = "Platform",
+       y = "Global Sales")
 
 # Box plots
-ggplot(data = sales, aes(x = NA_Sales)) + geom_boxplot() 
-ggplot(data = sales, aes(x = EU_Sales)) + geom_boxplot() 
-ggplot(data = sales, aes(x = Global_Sales)) + geom_boxplot() 
+ggplot(data = sales, aes(x = NA_Sales)) + geom_boxplot() +
+  labs(title = "Boxplot - North America Sales",
+       x = "NA Sales")
+ggplot(data = sales, aes(x = EU_Sales)) + geom_boxplot() +
+  labs(title = "Boxplot - European Union Sales",
+       x = "EU Sales")
+ggplot(data = sales, aes(x = Global_Sales)) + geom_boxplot() +
+  labs(title = "Boxplot -  Global Sales",
+       x = "Global Sales")
 
 
 # The histogram for the three regions show that they are are right-skewed, or positive-skewed, 
@@ -78,17 +102,36 @@ sales_prd <- sales %>%
 
 
 # Histogram
-ggplot(data = sales_prd, aes(x = NA_Sales_sum)) + geom_histogram(bins = 20)
-ggplot(data = sales_prd, aes(x = EU_Sales_sum)) + geom_histogram(bins = 20)
-ggplot(data = sales_prd, aes(x = Global_Sales_sum)) + geom_histogram(bins = 20)
+ggplot(data = sales_prd, aes(x = NA_Sales_sum)) + geom_histogram(bins = 20) +
+  labs(title = "Histogram - North America Sales",
+       x = "North America Sales",
+       y = "Count")
+ggplot(data = sales_prd, aes(x = EU_Sales_sum)) + geom_histogram(bins = 20) +
+  labs(title = "Histogram - European Union Sales",
+       x = "European Union Sales",
+       y = "Count")
+ggplot(data = sales_prd, aes(x = Global_Sales_sum)) + 
+  geom_histogram(bins = 20) +
+  labs(title = "Histogram - Global Sales",
+       x = "Global Sales",
+       y = "Count")
 
 # Scatterplot
 ggplot(data = sales_prd, aes(x = Platform, y = NA_Sales_sum)) + 
-  geom_point() 
+  geom_point() +
+  labs(title = "Scatterplot - North America Sales",
+       x = "Platform",
+       y = "North America Sales")
 ggplot(data = sales_prd, aes(x = Platform, y = EU_Sales_sum)) + 
-  geom_point() 
+  geom_point()  +
+  labs(title = "Scatterplot - European Union Sales",
+       x = "Platform",
+       y = "European Union Sales")
 ggplot(data = sales_prd, aes(x = Platform, y = Global_Sales_sum)) + 
-  geom_point() 
+  geom_point() +
+  labs(title = "Scatterplot - Global Sales",
+       x = "Platform",
+       y = "Global Sales")
 
 # Box plots
 ggplot(data = sales_prd, aes(x = NA_Sales_sum)) + geom_boxplot() 
@@ -99,7 +142,7 @@ ggplot(data = sales_prd, aes(x = Global_Sales_sum)) + geom_boxplot()
 # Determine the normality of the data set.
 # Create Q-Q Plots
 library(moments)
-par(mfrow=c(1,3))
+par(mfcol=c(1,3))
 qqnorm(sales_prd$NA_Sales_sum, main = 'NA - Normal Q-Q Plot')
 qqline(sales_prd$NA_Sales_sum,
        col = 'red',
@@ -229,9 +272,15 @@ modela = lm(Global_Sales_sum~NA_Sales_sum + EU_Sales_sum, data=sales_prd)
 
 # Print the summary statistics.
 summary(modela)
-#NA_Sales_sum  1.15237    0.02502  46.064  < 2e-16 ***
-#EU_Sales_sum  1.34554    0.04213  31.939  < 2e-16 ***
+# Coefficients:
+# (Intercept)            Estimate Std. Error t value Pr(>|t|) 
+# NA_Sales_sum  1.15237    0.02502  46.064  < 2e-16 ***
+# EU_Sales_sum  1.34554    0.04213  31.939  < 2e-16 ***
 # Multiple R-squared:  0.9683,	Adjusted R-squared:  0.9681
+
+plot(modela$residuals)
+# There is no pattern.
+plot(modela)
 
 ################################################################################
 
